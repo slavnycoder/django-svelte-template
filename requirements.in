@@ -1,0 +1,10 @@
+django
+djangorestframework
+gunicorn
+django-environ
+django-redis
+psycopg2-binary
+django-redis
+dj_database_url
+django-celery-beat
+whitenoise
