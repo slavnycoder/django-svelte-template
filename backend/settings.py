@@ -1,7 +1,6 @@
 import os
 from pathlib import Path
 
-import dj_database_url
 import environ
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -71,7 +70,7 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 
 DATABASES = {
     "default": {
-        **dj_database_url.config(default=env("DATABASE_URL")),
+        **env.db(),
         "ATOMIC_REQUESTS": True,
     }
 }
