@@ -7,11 +7,11 @@
     <link rel="icon" type="image/svg+xml" href="{% static 'vite.svg' %}" />
     <meta name='viewport' content='width=device-width,initial-scale=1'>
     <title>Svelte app</title>
-    <link rel='stylesheet' href="{% static 'index.css' %}?{{ random }}">
+    <link rel='stylesheet' href="{% static '/assets/index.css' %}?{{ random }}">
 </head>
 
 <body>
 <div id="app"></div>
-<script defer type="module" src="{% static 'index.js' %}?{{ random }}"></script>
+<script defer type="module" src="{% static '/assets/index.js' %}?{{ random }}"></script>
 </body>
 </html>

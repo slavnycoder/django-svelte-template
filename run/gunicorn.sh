@@ -11,4 +11,4 @@ echo "WEB_CONCURRENCY is '$WEB_CONCURRENCY'";
 python manage.py collectstatic --noinput
 python manage.py migrate
 #python manage.py loaddata fixtures/*
-gunicorn backend.wsgi:application -b 0.0.0.0:${PORT} --threads 2 --worker-class gthread
+gunicorn backend.wsgi:application -b 0.0.0.0:${DJANGO_PORT} --threads 2 --worker-class gthread
