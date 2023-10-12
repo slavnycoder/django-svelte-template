@@ -1,58 +1,35 @@
 version: "3.8"
 
+x-environment: &env
+  env_file: .env
+
 x-django: &django
-  build:
-    context: .
-    dockerfile: Dockerfile
-  env_file:
-    - .env
-  environment:
-    DATABASE_URL: postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}
-    REDIS_URL: redis://redis:6379/0
+  <<: *env
+  build: .
+#  environment:
+#    DATABASE_URL: postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}
   restart: unless-stopped
-  depends_on:
-    - db
-    - redis
 
 services:
   django:
     <<: *django
     command: ./run/gunicorn.sh
     healthcheck:
-      test: "curl --fail http://0.0.0.0:${PORT}/health/ || exit 1"
+      test: "curl --fail http://0.0.0.0:${DJANGO_PORT}/health/ || exit 1"
       retries: 3
     ports:
-      - "${PORT}:${PORT}"
+      - "${DJANGO_PORT}:${DJANGO_PORT}"
 
-  celery:
-    <<: *django
-    command: ./run/celery_worker.sh
-    depends_on:
-      django:
-        condition: service_healthy
+#  db:
+#    image: postgres:14
+#    restart: unless-stopped
+#    env_file:
+#      - .env
+#    ports:
+#      - "127.0.0.1:5432:5432"
+#    volumes:
+#      - postgresql:/var/lib/postgresql
 
-  celery-beat:
-    <<: *django
-    command: ./run/celery_beat.sh
-    depends_on:
-      django:
-        condition: service_healthy
-
-  redis:
-    image: redis
-    env_file:
-      - .env
-    command: sh -c 'redis-server --requirepass "${REDIS_PASSWORD}"'
-    restart: unless-stopped
-
-  db:
-    image: postgres:14
-    restart: unless-stopped
-    env_file:
-      - .env
-    volumes:
-      - postgresql:/var/lib/postgresql
-
-volumes:
-  postgresql:
-    driver: local
+#volumes:
+#  postgresql:
+#    driver: local
